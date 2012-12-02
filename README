@@ -1,0 +1,33 @@
+What? 
+
+These are qmail-spp modules you can use in the qmail smtp chain of events
+to control or log connections by country. 
+
+See: http://qmail-spp.sourceforge.net/doc/ for details on the module. 
+
+What do they do? 
+
+sppgeoip.py just logs the source country of an incoming smtp connection in the header of an email: 
+	X-SPP-GEOIP: US: United States
+
+sppgeoipauth.py will whitelist countries you'll accept authentication attempts from and log success/failures.
+	To set your list of countries change: 
+		allowed=['US']
+	to allowed=['US','UK','FR'] or whatever list of country codes you want to login via smtp.
+
+qmail setup: 
+	To enable the modules, configure your /var/qmail/control/smtpplugins file thusly: 
+
+	# plugins to execute on client's connection
+	[connection]
+	plugins/sppgeoip.py
+
+	# plugins to execute on AUTH command
+	[auth]
+	plugins/sppgeoipauth.py
+
+Make sure all the .py files are executable (chmod +x *.py) or nothing but fail will happen.
+
+Feel free to mod the sppgeoip.py if you want to whitelist/blacklist by country.
+
+
